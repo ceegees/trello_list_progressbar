@@ -17,6 +17,6 @@ Support:
 
 The plugin is available as a chrome extension.
 
-Other browsers can make use of the 
-[Bookamrklet](
-javascript:(function(){var s=document.createElement("script");s.type="text/javascript";s.src="https://s3.amazonaws.com/cgs-dev/trello.js?r=6";document.body.appendChild(s)})() )
+Other browsers can make use of the Bookmarklet
+
+javascript:(function(){var s=document.createElement("script");s.type="text/javascript";s.src="https://s3.amazonaws.com/cgs-dev/trello.js?r=6";document.body.appendChild(s)})() 
