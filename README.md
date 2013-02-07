@@ -11,4 +11,12 @@ If the due dates are set on the individual card item, extension calculates the t
 
 Use Case
 
-you have N tasks to be completed for a milestone which started from D1 and ends on D2  on any day  D [ D1 <= D <= D2 ]  . you can see the percentage completion of tasks to the  percentage of total time finished. So if the percentage of completion of taks is 
+you have N tasks to be completed for a milestone which started from D1 and ends on D2  on any day  D [ D1 <= D <= D2 ]  . you can see the percentage completion of tasks to the  percentage of total time finished. So if the percentage of completion of taks is .
+
+Support:
+
+The plugin is available as a chrome extension.
+
+Other browsers can make use of the 
+[Bookamrklet](
+javascript:(function(){var s=document.createElement("script");s.type="text/javascript";s.src="https://s3.amazonaws.com/cgs-dev/trello.js?r=6";document.body.appendChild(s)})() )
