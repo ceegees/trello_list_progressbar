@@ -1,4 +1,75 @@
+Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
+    var paper = this,
+        rad = Math.PI / 180,
+        chart = this.set();
+    function sector(cx, cy, r, startAngle, endAngle, params) {
+        var x1 = cx + r * Math.cos(-startAngle * rad),
+            x2 = cx + r * Math.cos(-endAngle * rad),
+            y1 = cy + r * Math.sin(-startAngle * rad),
+            y2 = cy + r * Math.sin(-endAngle * rad);
+        return paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
+    }
 
+
+    var textTop = cy + r + 20;
+    var angle = 180,
+        total = 0,
+        start = 0.15,
+        process = function (j) {
+
+           
+            var value = values[j],
+                angleSection =  (360 * value / total),
+                percent = Math.floor(value* 100/total);
+           		start += value/total;
+           		if (start > 1) {
+           			start -= 1;
+           		}
+            	var color = Raphael.hsb(start, .75, 1),
+                ms = 500,
+                delta = 30,
+                bcolor = Raphael.hsb(start, 1, 0.5);
+                if (values.length == 1) {
+                	var p = paper.circle(cx,cy,r).attr( {fill: "r(0.5,0.5)" + color + "-" + bcolor, stroke: stroke, "stroke-width": 3})
+                } else {
+                	var gr = '0-#f00-#000:20-#f00';
+                	//gr = "r(0.25, 0.75)#fff-#000";
+                	gr = "90-" + bcolor + "-" + color
+                	var p = sector(cx, cy, r, angle - angleSection, angle , {fill: gr, stroke: stroke, "stroke-width": 3});
+               	}
+                var rect = paper.rect(0,textTop - 5,10,10).attr({fill:color, stroke:"white"}),
+                txt = paper.text(15,textTop,
+                 (percent >= 10 ? percent : "0"+percent)+" % :"+labels[j]).attr({stroke: "black",strokeWidth:2, "font-size": 12,"cursor": "pointer","text-anchor":"start"});
+                textTop += 20;
+            p.mouseover(function () {
+                p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, "elastic");
+                txt.stop().animate({stroke: '#2478A8'}, ms, "elastic");
+            }).mouseout(function () {
+                p.stop().animate({transform: ""}, ms, "elastic");
+                txt.stop().animate({stroke: 'black'}, ms);
+            });
+            txt.mouseover(function(){
+            	p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, "elastic");
+            	txt.attr({stroke: "#2478A8"});
+            }).mouseout(function(){
+            	p.stop().animate({transform: ""}, ms, "elastic");
+            	txt.attr({stroke: "black"});
+            });
+            angle -= angleSection;
+            chart.push(p);
+            chart.push(txt);
+        };
+    for (var i = 0, ii = values.length; i < ii; i++) {
+        total += values[i];
+    }
+    for (i = 0; i < ii; i++) {
+        process(i);
+    }
+    return chart;
+};
+
+
+(function() {
 var months = { 
 	'JAN' : { pos : 1 , days : 31 },
 	'FEB' : { pos : 2 , days : 28 }, 
@@ -64,9 +135,18 @@ function trelloPluginUpdateProgress() {
 			break;
 		}
 	}
+	var checked = true;
+	if (!$("#count_todos").is(':checked')) {
+		checked = false;
+	}
+
 	var todayDate = dt.getDate();
 	$(clsTrelloListProgress).remove(); //remove previous progressbars , calculate add again
 	var cumulativeTotal = 0;
+
+	var names = [];
+	var counts = [];
+	
 	$(clsTrelloList).each(function() {
 		var progress = 0;
 		var total = 0;
@@ -75,10 +155,17 @@ function trelloPluginUpdateProgress() {
 		var minMon = null;
 		var minDay = null;
 		var leftMargin = 70; 
+
+		var cardCount = 0;
+
 		/* We dont want to query trello API as the information 
 		is already present on the cards parse it and use it.
 		*/
 		$(this).find(clsTrelloCard).each(function() {
+
+			if (!$(this).is(":visible") ) {
+				return;
+			}
 			var checkList = $(this).find(clsTrelloIconCheckList);
 			if (checkList.length > 0) {
 				var countByTotal = checkList.parent().find(clsTrelloBadgeText).html()
@@ -88,6 +175,7 @@ function trelloPluginUpdateProgress() {
 			} else {
 				total++;
 			}
+			cardCount++;
 
 			var dueDate = $(this).find(clsTrelloIconClock);
 			if (dueDate.length > 0) { // A due date is set
@@ -117,17 +205,28 @@ function trelloPluginUpdateProgress() {
 				}
 			}
 		});
-
+	
+		
+		if (checked) {
+			cardCount = total;
+		}
+		if (cardCount > 0) {
+			names.push($(this).find(".list-header h2").text());
+			counts.push(cardCount);
+			//cardCount;
+		}
+		
 		if (total == 0) {
 			total = 1; //handle NaN
 		}
 
-		progress = Math.floor(progress * 100 / total);
+		progress = Math.ceil(progress * 100 / total);
 		cumulativeTotal += total;
 
 		if ($(this).width() < 250) {
 			leftMargin = 60;
 		}
+
 		$(this).find(".list-header").append(
 			'<div class="task-progress-total gutter trello-list-progress" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
 			+' <div class="progress-current" style="width: '+ progress +'%;"> '
@@ -154,14 +253,23 @@ function trelloPluginUpdateProgress() {
 
 			$(this).find(".list-header").append(
 				'<div class="task-progress-total gutter trello-list-progress" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-				+' <div class="progress-current" style="border:solid red 1px; background:red;width: '+ timeProgress +'%;"> '
+				+' <div class="progress-current" style="border-bottom:solid red 1px;border-top:none; background:red;width: '+ timeProgress +'%;"> '
 				+'<span class="progress-percentage " style="width:75px;left:-70px"> Time '+ timeProgress +'%</span> </div> </div>');
 		}
 
 
-
 	});
 
+
+	if (counts.length > 0) {
+
+		$("#card_list_status").html('');
+    	Raphael("card_list_status", 200, 160 + counts.length * 25).pieChart(100, 85, 75, counts, names, "#fff");
+    }
+/*
+	$("#card_status_img").attr("src",
+	"https://chart.googleapis.com/chart?cht=p3&chd=t:"+counts.join(",")+"&chs=200x100&chl="+names.join("|"));
+*/
 	if (typeof _gat != 'undefined' && typeof gTrelloPluginTracker == 'undefined') {
 		gTrelloPluginTracker = _gat._createTracker('UA-30327290-1');	
 	}
@@ -172,6 +280,38 @@ function trelloPluginUpdateProgress() {
 }
 
 var gTrelloPluginLoadAttemptCount = 0;
+/**
+<div class="member ui-draggable">  
+	<span class="member-initials" title="Ajison Baby (ajisonbaby)"> AB  </span>  
+ 	<span class="status disconnected" title="This member is offline."></span>    
+</div>
+
+
+<div class="board-widget board-widget-members clearfix">
+	<div class="board-widget-title" name="showSidebarMembers" title="Show or hide the members section."> 
+		<h3>CardList Status</h3>
+		<span class="showhide-indicator">Hide</span>
+	</div> 
+	<div class="board-widget-content">
+	</div> 
+</div>
+*/
+
+function drawVisualization() {
+  // Create and populate the data table.
+  var data = google.visualization.arrayToDataTable([
+    ['Task', 'Hours per Day'],
+    ['Work', 11],
+    ['Eat', 2],
+    ['Commute', 2],
+    ['Watch TV', 2],
+    ['Sleep', 7]
+  ]);
+
+  // Create and draw the visualization.
+  new google.visualization.PieChart(document.getElementById('card_list_status')).
+      draw(data, {title:"So, how was your day?"});
+}
 
 function trelloPluginDoFirstLoad() {
 
@@ -182,20 +322,56 @@ function trelloPluginDoFirstLoad() {
 	if ($("#button-reload-progress").length != 0) {
 		return;
 	}
+	
 	try {
 
+		$(document).delegate("ul.js-fill-boards li a",'click',function() {
+			setTimeout(trelloPluginDoFirstLoad,1000);
+		});
+
+		$(document).delegate("a.js-toggle-label-filter",'mouseup',function(){
+			setTimeout(trelloPluginUpdateProgress,200);
+		});
+
+
+		$(document).delegate("a.js-select-member",'mouseup',function(){
+			setTimeout(trelloPluginUpdateProgress,200);
+		});
+
+		$(document).delegate("a.js-clear-all ",'mouseup',function(){
+			setTimeout(trelloPluginUpdateProgress,200);
+		});
+		
 		$(".header-user").prepend('<a id="button-reload-progress" class="header-btn header-notifications" '
 		+'title="Update Progress" href="#" >'
 		+'  <span class="header-btn-text">Update List Progress</span> </a>');
 		
 		$("#button-reload-progress").click(trelloPluginUpdateProgress);
+ 
+
+		$(".board-widgets").prepend('<div id="card_distribution" class="board-widget board-widget-card-distribution clearfix">'
+			+ '<div class="board-widget-title" name="showSidebarMembers" title="Show or hide card distribution section.">'
+			+ '<h3>Card Distribution</h3>'
+			+ '<span class="showhide-indicator">Hide</span>'
+			+ '</div>' 
+			+ '<input type="checkbox" checked="true" id="count_todos" /> Count Todos'
+			+ '<div id="card_list_status" class="board-widget-content" >'
+			+ '</div> '
+			+ '</div>');
+
+		$("#count_todos").click(function(){
+			trelloPluginUpdateProgress();
+		})
+  		$("#card_distribution .board-widget-title").click(function(){
+  			$(this).parent().find(".board-widget-content").toggle();
+  		}) ;
 
 		trelloPluginUpdateProgress();
 		if ($(".trello-list-progress").length == 0) {
 			setTimeout(trelloPluginDoFirstLoad,3000)
 		}
 	}	catch(e) {
-		if (gTrelloPluginLoadAttemptCount > 20 ) {
+		if (gTrelloPluginLoadAttemptCount > 3 ) {
 			return;
 		}
 		gTrelloPluginLoadAttemptCount++;
@@ -204,3 +380,7 @@ function trelloPluginDoFirstLoad() {
 }
 setTimeout(trelloPluginDoFirstLoad,1000);
 
+
+
+
+})()
