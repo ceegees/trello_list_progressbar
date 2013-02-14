@@ -23,25 +23,34 @@ javascript:(function(){var s=document.createElement("script");s.type="text/javas
 
 Credits
 ---------------
-Uses Raphael js for plotting the pie chart
+ Raphael js - Used for plotting the pie chart
 
+
+Version 1.6.2
+-----------------
+* Bug fixes, removing unwanted js references
+
+
+Version 1.6.1
+----------------
+* Hook to board load events from trello home page 
 
 
 Version 1.6
 ----------------
-Hook to board change events to update progress without a reload.
-Hook to Filter change events to update progress.
-Add the card distribution pie chart to show count of cards on each board.
-Show legends with colors same as that of pie chart.
-Option to toggle the card distribution wrt individual Todo Items Or Number of cards in the list.
+* Hook to board change events to update progress without a reload.
+* Hook to Filter change events to update progress.
+* Add the card distribution pie chart to show count of cards on each board.
+* Show legends with colors same as that of pie chart.
+* Option to toggle the card distribution wrt individual Todo Items Or Number of cards in the list.
 
 
 Version 1.5
 ---------------
-Adds a progress bar to trello on individual card list to track progress of individual tasks.
-Extension helps to give a quick overview of the current list status.
-It adds a progress bar to show the cumulative  percentage of completion of individual cards on a list . 
-If the due dates are set on the individual card item, extension calculates the total number of days allocated for entire items in the card list and based on the today's date show the percentage of time depleted .
+* Adds a progress bar to trello on individual card list to track progress of individual tasks.
+* Extension helps to give a quick overview of the current list status.
+* It adds a progress bar to show the cumulative  percentage of completion of individual cards on a list . 
+* If the due dates are set on the individual card item, extension calculates the total number of days allocated for entire items in the card list and based on the today's date show the percentage of time depleted .
 
 
 

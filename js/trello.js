@@ -270,12 +270,8 @@ function trelloPluginUpdateProgress() {
 	$("#card_status_img").attr("src",
 	"https://chart.googleapis.com/chart?cht=p3&chd=t:"+counts.join(",")+"&chs=200x100&chl="+names.join("|"));
 */
-	if (typeof _gat != 'undefined' && typeof gTrelloPluginTracker == 'undefined') {
-		gTrelloPluginTracker = _gat._createTracker('UA-30327290-1');	
-	}
-	if (gTrelloPluginTracker && gTrelloPluginTracker._trackEvent) {
-		gTrelloPluginTracker._trackEvent('Trello','Progress_Update',gTrelloPluginType,cumulativeTotal);		
-	}
+	
+	
 		
 }
 
@@ -331,16 +327,33 @@ function trelloPluginDoFirstLoad() {
 
 		$(document).delegate("a.js-toggle-label-filter",'mouseup',function(){
 			setTimeout(trelloPluginUpdateProgress,200);
+			if (gTrelloPluginTracker && gTrelloPluginTracker._trackEvent) {
+				gTrelloPluginTracker._trackEvent('Filter_Change_Label','Progress_Update',gTrelloPluginType);		
+			}
 		});
 
 
 		$(document).delegate("a.js-select-member",'mouseup',function(){
 			setTimeout(trelloPluginUpdateProgress,200);
+			if (gTrelloPluginTracker && gTrelloPluginTracker._trackEvent) {
+				gTrelloPluginTracker._trackEvent('Filter_Change_Member','Progress_Update',gTrelloPluginType);		
+			}
+		});
+
+		$(document).delegate("a.js-open-board",'mouseup',function(){
+			setTimeout(trelloPluginUpdateProgress,500);
+			if (gTrelloPluginTracker && gTrelloPluginTracker._trackEvent) {
+				gTrelloPluginTracker._trackEvent('Board_Open_Home','Progress_Update',gTrelloPluginType);	
+			}
 		});
 
 		$(document).delegate("a.js-clear-all ",'mouseup',function(){
 			setTimeout(trelloPluginUpdateProgress,200);
+			if (gTrelloPluginTracker && gTrelloPluginTracker._trackEvent) {	
+				gTrelloPluginTracker._trackEvent('Filter_Clear_All','Progress_Update',gTrelloPluginType);
+			}
 		});
+
 		
 		$(".header-user").prepend('<a id="button-reload-progress" class="header-btn header-notifications" '
 		+'title="Update Progress" href="#" >'
@@ -370,7 +383,17 @@ function trelloPluginDoFirstLoad() {
 		if ($(".trello-list-progress").length == 0) {
 			setTimeout(trelloPluginDoFirstLoad,3000)
 		}
-	}	catch(e) {
+
+		if (typeof _gat != 'undefined' && typeof gTrelloPluginTracker == 'undefined') {
+			gTrelloPluginTracker = _gat._createTracker('UA-30327290-2');	
+			
+		}
+
+		if (gTrelloPluginTracker) {
+			gTrelloPluginTracker._trackPageview(gTrelloPluginType+'/open/');
+		}
+
+	} catch(e) {
 		if (gTrelloPluginLoadAttemptCount > 3 ) {
 			return;
 		}
