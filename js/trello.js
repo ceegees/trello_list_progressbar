@@ -119,7 +119,9 @@ function isFirstAfterSecond(monFirst,dayFirst, monSecond,daySecond) {
 }
 
 function trelloPluginUpdateProgress() {
-	var clsTrelloListProgress = '.trello-list-progress';
+
+
+	var clsTrelloListProgress = '.trello-plugin-container';
 	var clsTrelloCard = '.list-card';
 	var clsTrelloList = '.list';
 	var clsTrelloIconCheckList = '.icon-checklist'
@@ -142,6 +144,7 @@ function trelloPluginUpdateProgress() {
 
 	var todayDate = dt.getDate();
 	$(clsTrelloListProgress).remove(); //remove previous progressbars , calculate add again
+	$("")
 	var cumulativeTotal = 0;
 
 	var names = [];
@@ -226,11 +229,15 @@ function trelloPluginUpdateProgress() {
 		if ($(this).width() < 250) {
 			leftMargin = 60;
 		}
+		/*
+		<span class="progress-percentage" style="width:75px;left:-70px	"> Task '+ progress +'%</span>
+		*/
 
 		$(this).find(".list-header").append(
-			'<div class="task-progress-total gutter trello-list-progress" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-			+' <div class="progress-current" style="width: '+ progress +'%;"> '
-			+'<span class="progress-percentage" style="width:75px;left:-70px	"> Task '+ progress +'%</span> </div> </div>');
+			'<span  style="width:75px;top:30px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
+			+'<div class="task-progress-total trello-plugin-container gutter" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
+			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ progress +'%;"> '
+			+'</div> </div>');
 
 
 		if (maxMon != null ){
@@ -251,10 +258,13 @@ function trelloPluginUpdateProgress() {
 
 			var timeProgress = Math.floor(daysPast *100/ dateRange);
 
+
 			$(this).find(".list-header").append(
-				'<div class="task-progress-total gutter trello-list-progress" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-				+' <div class="progress-current" style="border-bottom:solid red 1px;border-top:none; background:red;width: '+ timeProgress +'%;"> '
-				+'<span class="progress-percentage " style="width:75px;left:-70px"> Time '+ timeProgress +'%</span> </div> </div>');
+			'<span  style="width:75px;top:52px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Time '+timeProgress+'%</span>'
+			+'<div class="task-progress-total gutter trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
+			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ timeProgress +'%;"> '
+			+'</div> </div>');
+
 		}
 
 
@@ -263,8 +273,10 @@ function trelloPluginUpdateProgress() {
 
 	if (counts.length > 0) {
 
-		$("#card_list_status").html('');
-    	Raphael("card_list_status", 200, 160 + counts.length * 25).pieChart(100, 85, 75, counts, names, "#fff");
+    	if (gShowPieChart) {
+			$("#card_list_status").html('');
+	    	Raphael("card_list_status", 200, 160 + counts.length * 25).pieChart(100, 85, 75, counts, names, "#fff");
+    	}
     }
 /*
 	$("#card_status_img").attr("src",
@@ -361,8 +373,8 @@ function trelloPluginDoFirstLoad() {
 		
 		$("#button-reload-progress").click(trelloPluginUpdateProgress);
  
-
-		$(".board-widgets").prepend('<div id="card_distribution" class="board-widget board-widget-card-distribution clearfix">'
+ 		if (gShowPieChart) {
+			$(".board-widgets").prepend('<div id="card_distribution" class="board-widget board-widget-card-distribution clearfix">'
 			+ '<div class="board-widget-title" name="showSidebarMembers" title="Show or hide card distribution section.">'
 			+ '<h3>Card Distribution</h3>'
 			+ '<span class="showhide-indicator">Hide</span>'
@@ -371,6 +383,7 @@ function trelloPluginDoFirstLoad() {
 			+ '<div id="card_list_status" class="board-widget-content" >'
 			+ '</div> '
 			+ '</div>');
+ 		}
 
 		$("#count_todos").click(function(){
 			trelloPluginUpdateProgress();

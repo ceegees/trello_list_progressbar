@@ -25,6 +25,14 @@ Credits
 ---------------
  Raphael js - Used for plotting the pie chart
 
+Version 1.7
+----------------
+* Added Changes for accomodating the trello style changes
+
+Version 1.6.3
+----------------
+* Added Options tab for turning off the pie chart . Options can be accessed from the extensions preference pane
+
 
 Version 1.6.2
 -----------------

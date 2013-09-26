@@ -1,3 +1,5 @@
+gShowPieChart = true;
+
 gTrelloPluginType = 'chrome_extension';
 var gTrelloPluginTracker = {
 	_trackEvent : function(cat,action,label,value) {
@@ -14,4 +16,13 @@ var gTrelloPluginTracker = {
 		});
 	}
 };
+
+chrome.extension.sendMessage({
+	type:"status_query",
+	name :"show_pie_chart",
+} , function(data) {
+	if (data.result == 'no') {
+		gShowPieChart = false;
+	}
+})
 

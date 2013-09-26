@@ -9,13 +9,13 @@ _gaq.push(['_setAccount', 'UA-30327290-2']);
 
 chrome.extension.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if (request.type =='event') {
+    var data = {status:true};
+    if (request.type == 'status_query') {
+        data.result = localStorage[request.name];
+    } else if (request.type =='event') {
       _gaq.push(['_trackEvent',request.category,request.action,request.label,request.value]);
     } else {
       _gaq.push(['_trackPageview',request.url]);
     }
-    sendResponse({status:true});
+    sendResponse(data);
  });
-
-
-
