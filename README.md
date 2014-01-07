@@ -29,8 +29,10 @@ javascript:(function(){var s=document.createElement("script");s.type="text/javas
 Credits
 ---------------
  Raphael js - Used for plotting the pie chart
+ 
 
 Version 1.8 
+----------------
 * Bug Fixes #1
 
 
