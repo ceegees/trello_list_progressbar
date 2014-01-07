@@ -234,10 +234,11 @@ function trelloPluginUpdateProgress() {
 		*/
 
 		$(this).find(".list-header").append(
-			'<span  style="width:75px;top:30px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
+
+			'<div style="position:relative"><span  style="width:75px;top:2px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
 			+'<div class="task-progress-total trello-plugin-container gutter" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
 			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ progress +'%;"> '
-			+'</div> </div>');
+			+'</div></div></div>');
 
 
 		if (maxMon != null ){
@@ -260,7 +261,7 @@ function trelloPluginUpdateProgress() {
 
 
 			$(this).find(".list-header").append(
-			'<span  style="width:75px;top:52px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Time '+timeProgress+'%</span>'
+			'<span  style="width:75px;top:bottom:0px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Time '+timeProgress+'%</span>'
 			+'<div class="task-progress-total gutter trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
 			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ timeProgress +'%;"> '
 			+'</div> </div>');

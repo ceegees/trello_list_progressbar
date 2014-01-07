@@ -6,6 +6,11 @@ Functionality
 Adds more statistical information about the different card lists on a trello board. Plugin calculates individual card weights based on the number of todo items [considers each todo item as a story point]. This weight is used to calculate different statistical data.
 
 
+Download
+---------------
+https://chrome.google.com/webstore/detail/trello-list-progress-bar/klhahganeobopkelbdeljamclomlhhjg/details?hl=en
+
+
 Use Case
 --------------
 you have N tasks to be completed for a milestone which started from D1 and ends on D2  on any day  D [ D1 <= D <= D2 ] .You can see the percentage completion of cards -[condiering the weight of the card] to the  percentage of total time finished. Which will convey a good deal about the health of target deadline for milestone.
@@ -24,6 +29,10 @@ javascript:(function(){var s=document.createElement("script");s.type="text/javas
 Credits
 ---------------
  Raphael js - Used for plotting the pie chart
+
+Version 1.8 
+* Bug Fixes #1
+
 
 Version 1.7
 ----------------
