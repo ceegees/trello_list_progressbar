@@ -232,7 +232,9 @@ function trelloPluginUpdateProgress() {
 		/*
 		<span class="progress-percentage" style="width:75px;left:-70px	"> Task '+ progress +'%</span>
 		*/
-
+		/**
+		Class changes for handling new trello version update
+		*/
 		$(this).find(".list-header").append(
 
 			'<div class="checklist-progress" style="position:relative"><span  style="width:75px;top:2px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
