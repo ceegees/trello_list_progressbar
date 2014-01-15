@@ -235,9 +235,9 @@ function trelloPluginUpdateProgress() {
 
 		$(this).find(".list-header").append(
 
-			'<div style="position:relative"><span  style="width:75px;top:2px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
-			+'<div class="task-progress-total trello-plugin-container gutter" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ progress +'%;"> '
+			'<div class="checklist-progress" style="position:relative"><span  style="width:75px;top:2px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
+			+'<div class=" checklist-progress-bar trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
+			+' <div class="progress-current  checklist-progress-bar-current js-checklist-progress-bar" style="width: '+ progress +'%;"> '
 			+'</div></div></div>');
 
 
@@ -261,10 +261,10 @@ function trelloPluginUpdateProgress() {
 
 
 			$(this).find(".list-header").append(
-			'<span  style="width:75px;top:bottom:0px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Time '+timeProgress+'%</span>'
-			+'<div class="task-progress-total gutter trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-			+' <div class="progress-current  js-checklist-progress-bar" style="width: '+ timeProgress +'%;"> '
-			+'</div> </div>');
+			' <div class="checklist-progress"> <span  style="width:75px;top:bottom:0px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Time '+timeProgress+'%</span>'
+			+'<div class="checklist-progress-bar trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
+			+' <div class="progress-current checklist-progress-bar-current js-checklist-progress-bar" style="width: '+ timeProgress +'%;"> '
+			+'</div></div> </div>');
 
 		}
 
@@ -335,8 +335,15 @@ function trelloPluginDoFirstLoad() {
 	try {
 
 		$(document).delegate("ul.js-fill-boards li a",'click',function() {
-			setTimeout(trelloPluginDoFirstLoad,1000);
+			setTimeout(trelloPluginDoFirstLoad,4000);
 		});
+
+		$(document).delegate("ul.sidebar-boards-list li a",'click',function() {
+			setTimeout(trelloPluginDoFirstLoad,4000);
+		});
+
+
+		
 
 		$(document).delegate("a.js-toggle-label-filter",'mouseup',function(){
 			setTimeout(trelloPluginUpdateProgress,200);

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Trello List Progress Bar",
   "description": "Shows various insights about trello board , at individual card list level as well as board level ",
-  "version": "1.8",
+  "version": "1.9",
   "background": {
     "scripts": ["js/background.js"]
   },  
