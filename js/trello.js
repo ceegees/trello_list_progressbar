@@ -384,7 +384,7 @@ function trelloPluginDoFirstLoad() {
 		$("#button-reload-progress").click(trelloPluginUpdateProgress);
  
  		if (gShowPieChart) {
-			$(".board-widgets").prepend('<div id="card_distribution" class="board-widget board-widget-card-distribution clearfix">'
+			$(".board-widgets-content-wrapper").prepend('<div id="card_distribution" class="board-widget board-widget-card-distribution clearfix">'
 			+ '<div class="board-widget-title" name="showSidebarMembers" title="Show or hide card distribution section.">'
 			+ '<h3>Card Distribution</h3>'
 			+ '<span class="showhide-indicator">Hide</span>'
@@ -399,7 +399,7 @@ function trelloPluginDoFirstLoad() {
 			trelloPluginUpdateProgress();
 		})
   		$("#card_distribution .board-widget-title").click(function(){
-  			$(this).parent().find(".board-widget-content").toggle();
+  			$(this).parent().find(".board-widget-content-wrapper").toggle();
   		}) ;
 
 		trelloPluginUpdateProgress();

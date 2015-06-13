@@ -30,6 +30,10 @@ Credits
 ---------------
  Raphael js - Used for plotting the pie chart
  
+Version 1.9.1 & 1.9.2
+----------------
+* Updates for handling new Trello version changes 
+ 
 Version 1.9
 ----------------
 * Updates for handling new Trello version changes 
