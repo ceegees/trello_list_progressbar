@@ -239,7 +239,7 @@ function trelloPluginUpdateProgress() {
 
 			'<div class="checklist-progress" style="position:relative"><span  style="width:75px;top:2px" class="trello-plugin-container checklist-progress-percentage js-checklist-progress-percent">Task '+progress+'%</span>'
 			+'<div class=" checklist-progress-bar trello-plugin-container" style="margin-left:'+leftMargin+'px;width:70%;margin-top:10px"> '
-			+' <div class="progress-current  checklist-progress-bar-current js-checklist-progress-bar" style="width: '+ progress +'%;"> '
+			+' <div class="progress-current  checklist-progress-bar-current' + (progress == 100 ? ' checklist-progress-bar-current-complete' : '') + ' js-checklist-progress-bar" style="width: '+ progress +'%;"> '
 			+'</div></div></div>');
 
 
